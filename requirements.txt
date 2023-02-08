@@ -1,0 +1,13 @@
+asgiref
+cffi
+cryptography
+Django
+django-environ
+django-extensions
+graphviz
+MarkupSafe
+pycparser
+PyMySQL
+pyOpenSSL
+sqlparse
+Werkzeug
