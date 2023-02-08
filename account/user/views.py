@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from .forms import AccountCreateForm
 
 
-def index_view(request):
-    return render(request, 'index.html')
+class IndexView(generic.TemplateView):
+    template_name = 'index.html'
 
 
 class RegisterView(generic.edit.CreateView):
