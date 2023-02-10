@@ -14,6 +14,9 @@ pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Create log directory
+LOG_PATH = BASE_DIR.parent / 'log'
+Path(LOG_PATH).mkdir(exist_ok=True)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -140,3 +143,38 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
+
+LOG_LEVEL = env("LOG_LEVEL")
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'default': {
+            'format': '[%(asctime)s] %(levelname)s in %(name)s %(module)s.%(funcName)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'file_django': {
+            'formatter': 'default',
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': LOG_PATH / 'django.log',
+        },
+        'file_auth': {
+            'formatter': 'default',
+            'class': 'logging.handlers.WatchedFileHandler',
+            'filename': LOG_PATH / 'auth.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file_django'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+        },
+        'auth': {
+            'handlers': ['file_auth'],
+            'level': LOG_LEVEL,
+            'propagate': False,
+        },
+    }
+}
