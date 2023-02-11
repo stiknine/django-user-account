@@ -6,7 +6,11 @@ from .models import Account
 
 
 class AccountAdmin(UserAdmin):
-    """Custom user account admin."""
+    """User account admin.
+
+    A subclass of Django's UserAdmin class, which implements the custom user forms.
+    """
+
     add_form = AccountCreateForm
     form = AccountChangeForm
     model = Account

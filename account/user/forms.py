@@ -4,6 +4,10 @@ from .models import Account
 
 
 class AccountCreateForm(UserCreationForm):
+    """User account creation form.
+
+    A subclass of Django's UserCreationForm, which implements the custom user model.
+    """
 
     class Meta:
         model = Account
@@ -11,6 +15,10 @@ class AccountCreateForm(UserCreationForm):
 
 
 class AccountChangeForm(UserChangeForm):
+    """User account change form.
+
+    A subclass of Django's UserChangeForm, which implements the custom user model.
+    """
 
     class Meta:
         model = Account
