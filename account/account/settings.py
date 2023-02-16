@@ -57,7 +57,7 @@ AUTH_USER_MODEL = 'user.Account'
 
 ROOT_URLCONF = 'account.urls'
 
-LOGIN_REDIRECT_URL = "user:index"
+LOGIN_REDIRECT_URL = "user:home"
 LOGOUT_REDIRECT_URL = "user:index"
 
 TEMPLATES = [

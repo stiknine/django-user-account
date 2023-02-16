@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block title %}{% block header %}Home{% endblock %}{% endblock %}
+
+{% block content %}
+    <p>Welcome home, <strong>{{ user.username }}</strong>!</p>
+{% endblock %}
