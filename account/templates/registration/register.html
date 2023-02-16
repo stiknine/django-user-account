@@ -1,12 +1,43 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Register{% endblock %}
+{% block header %}
+    <h1>{% block title %}Account Registration{% endblock %}</h1>
+    <a class="link block" href="{% url 'login' %}">Already have an account?</a><br>
+{% endblock %}
 
 {% block content %}
-<h2>Account Registration</h2>
+{% include "forms/errors.html" %}
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
+    <div class="input">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+        <div class="info">{{ form.username.help_text }}</div>
+    </div>
+
+    <div class="input">
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        {{ form.email }}
+    </div>
+
+    <div class="input">
+        <label for="{{ form.password1.id_for_label }}">Password</label>
+        {{ form.password1 }}
+        <div class="info">{{ form.password1.help_text }}</div>
+    </div>
+
+    <div class="input">
+        <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+        {{ form.password2 }}
+    </div>
+
+    <div class="input">
+        <input class="button" type="submit" name="register" value="Register" id="register">
+    </div>
 </form>
+{% endblock %}
+
+{% block jsbody %}
+    <script src="{% static 'js/formvalidator.js' %}"></script>
 {% endblock %}

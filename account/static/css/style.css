@@ -1,0 +1,240 @@
+/* body */
+html {
+    font-family: sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+body {
+    width: auto;
+    margin: 0 auto;
+    background: white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1f2e60;
+    margin: .3em 0;
+}
+
+p {
+    margin: .5em 0;
+}
+
+a {
+    cursor: pointer;
+    color: #00529B;
+    text-decoration: underline;
+    vertical-align: bottom;
+}
+
+a:hover {
+    color: black;
+}
+
+/* navigation */
+nav {
+    background-color: #eaeaea;
+    height: 52px;
+    top: 0;
+    position: fixed;
+    width: 100%;
+    padding: .3em 0;
+    z-index: 9;
+}
+
+nav div {
+    float: right;
+    margin-right: 1em;
+    text-align: right;
+}
+
+nav #logo {
+    float: left;
+    padding: 0;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 180px;
+}
+
+/* footer */
+footer {
+    height: 55px;
+    font-size: smaller;
+    margin: 2em 2em 0 0;
+}
+
+footer div {
+    float: right;
+}
+
+footer div p {
+    margin: 0;
+    padding: 0;
+}
+
+/* content */
+section.content {
+    padding: 1em 2em .5em 2em;
+    clear: both;
+    min-height: calc(85vh - 55px);
+    margin-top: 60px;
+}
+
+section.content header h1 {
+    margin: .5em 0 1em 0;
+}
+
+section.content:last-child {
+    margin-bottom: 0;
+}
+
+section.content form {
+    margin: 1em 0;
+}
+
+section.content label {
+  font-weight: bold;
+  margin-bottom: .3em;
+  display: flex;
+}
+
+div.info {
+    font-size: smaller;
+    font-style: italic;
+    color: gray;
+    margin-top: .2em;
+}
+
+div.info ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* form */
+form .input {
+    margin-bottom: 1em;
+}
+
+fieldset {
+    padding-bottom: 0;
+}
+
+input, button, textarea, select {
+    font: inherit;
+    vertical-align: top;
+}
+
+input, textarea, select {
+    border: 1px solid #808080;
+}
+
+input, textarea {
+    border-radius: 2px;
+}
+
+input[type=submit], input[type=button], select {
+    border-radius: 4px;
+}
+
+select[multiple] {
+    min-width: 200px;
+    min-height: 100px;
+    border-radius: 2px;
+}
+
+.input input[type=text],
+.input input[type=password],
+.input input[type=email],
+.input input[type=number],
+.input textarea {
+    width: 42%;
+    padding: 5px 10px;
+    box-sizing: border-box;
+}
+
+.input input[type=checkbox] {
+    height: 16px;
+    width: 16px;
+    margin-left: 0;
+}
+
+.input select {
+    width: 42%;
+}
+
+.input input[readonly] {
+    border: 0;
+}
+
+.input input[readonly]:focus {
+    outline: none;
+}
+
+.button {
+    font-weight: bold;
+    padding: 10px 30px;
+    margin-top: 1.8em;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    background-color: #F2F2F2;
+    color: #00529B;
+    border: 1px solid #808080;
+    border-radius: 4px;
+}
+
+.button:hover {
+    background-color: #D3D3D3;
+}
+
+.button:active {
+    background-color: #A9A9A9;
+}
+
+/* message */
+div.flash {
+    margin: 1em 0;
+    padding: .5em 1em;
+    background-color: #BDE5F8;
+    border: 1px solid #00529B;
+    clear: both;
+}
+
+div.flash.error {
+    border-color: #D8000C;
+    background-color: #FFBABA;
+}
+
+div.flash.warning {
+    border-color: #e67300;
+    background-color: #ffcc99;
+}
+
+input.error,
+select.error,
+textarea.error {
+    outline: none;
+    border: 1px solid red;
+}
+
+input.error:valid,
+select.error:valid,
+textarea.error:valid {
+    border-style: solid;
+    border-color: inherit;
+}
+
+/* misc */
+.right {
+    text-align: right;
+}
+
+.block {
+    display: block;
+}
+
+.smaller {
+    font-size: smaller;
+}

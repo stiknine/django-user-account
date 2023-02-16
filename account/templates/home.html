@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}{% block header %}Home{% endblock %}{% endblock %}
+{% block header %}
+    <h1>{% block title %}Home{% endblock %}</h1>
+{% endblock %}
 
 {% block content %}
     <p>Welcome home, <strong>{{ user.username }}</strong>!</p>
+    {% lorem 3 p random %}
 {% endblock %}

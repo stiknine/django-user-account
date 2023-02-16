@@ -4,13 +4,31 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% block title %}User Account{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     {% load static %}
+    <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block csshead %}{% endblock %}
+    {% block jshead %}{% endblock %}
 </head>
 <body>
-    <main id="main-content">
-        {% block content %}{% endblock %}
+    <main id="main">
+        {% include 'nav.html' %}
+
+        <section id="content" class="content">
+            <header>{% block header %}{% endblock %}</header>
+
+            {% block content %}{% endblock %}
+        </section>
     </main>
+
+    <footer>
+        <div id="footer">
+            <p>&copy;{% now "Y" %} {% lorem 3 w %}</p>
+            <p class="right">{% lorem 2 w random %}</p>
+        </div>
+    </footer>
+
+    {% block jsbody %}{% endblock %}
 </body>
 </html>

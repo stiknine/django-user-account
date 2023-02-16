@@ -1,0 +1,15 @@
+{% load static %}
+<nav id="nav">
+    <a href="{% url 'user:index' %}">
+        <img id="logo" alt="Lorem Ipsum" src="{% static 'img/logo.png' %}">
+    </a>
+
+    <div>
+    {% if user.is_authenticated %}
+        <a class="link" href="{% url 'logout' %}">Log Out</a><br>
+        <span class="smaller">logged in as {{ user.username }}</span>
+    {% else %}
+        <a class="link" href="{% url 'login' %}">Log In</a> | <a class="link" href="{% url 'user:register' %}">Register</a>
+    {% endif %}
+    </div>
+</nav>

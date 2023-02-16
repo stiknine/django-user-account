@@ -1,12 +1,28 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Log In{% endblock %}
 
 {% block content %}
-<h2>Log In</h2>
+{% include "forms/errors.html" %}
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Log In</button>
+    <div class="input">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+    </div>
+
+    <div class="input">
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+    </div>
+
+    <div class="input">
+        <input class="button" type="submit" name="login" value="Log In" id="login">
+    </div>
 </form>
+{% endblock %}
+
+{% block jsbody %}
+    <script src="{% static 'js/formvalidator.js' %}"></script>
 {% endblock %}
