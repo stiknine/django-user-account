@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# Setup a Django project which implements a customer user model,
-# environment variable configuration (.env), Django and auth logging
+# Set up a Django project which implements a customer user model,
+# environment variable configuration (.env), django and auth logging,
 # and a basic project layout.
 
 SCRIPT_PATH=$(cd $(dirname $0) ; pwd -P)
@@ -81,7 +81,7 @@ cp -R "${SCRIPT_PATH}/account/account/settings.py" "${PROJECT_NAME}/"
 sed -i '' "s|'account.urls'|'${PROJECT_NAME}.urls'|" "${PROJECT_NAME}/settings.py"
 sed -i '' "s|'account.wsgi.application'|'${PROJECT_NAME}.wsgi.application'|" "${PROJECT_NAME}/settings.py"
 
-printf "Would you like to create a self-signed SSL cert? (yes/no) "
+printf "Would you like to create a self-signed SSL cert? (yes/no) [default no] "
 read MAKE_CERT
 case "$MAKE_CERT" in
   y|Y|yes)
@@ -101,5 +101,8 @@ printf "  Modify the ${PROJECT_NAME}/.env file with your configuration options.\
 printf "  Run the following commands within the project directory:\n"
 printf "    (venv) $ python manage.py makemigrations\n"
 printf "    (venv) $ python manage.py migrate\n"
+printf "    If created a self-signed cert:\n"
 printf "    (venv) $ python manage.py runserver_plus --cert-file local.crt --key-file local.key\n"
+printf "    To auto create a cert:\n"
+printf "    (venv) $ python manage.py runserver_plus --cert-file cert.crt\n"
 printf "\n\n"
