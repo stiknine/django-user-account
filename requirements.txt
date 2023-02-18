@@ -10,4 +10,5 @@ pycparser
 PyMySQL
 pyOpenSSL
 sqlparse
+watchdog
 Werkzeug
