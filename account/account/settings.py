@@ -1,4 +1,4 @@
-"""Django settings for account project."""
+"""Django project settings."""
 import environ
 import pymysql
 
