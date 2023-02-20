@@ -8,8 +8,6 @@ By default, MySQL is the pre-configured database engine. If your project uses a 
 
 ## Features
 
-___
-
 * Custom User Model
   * Recommended when starting a new project with authentication
 * django-environ
@@ -26,8 +24,6 @@ ___
 See [usage](#usage) for details on project layout and resources.
 
 ## Getting Started
-
-___
 
 The following instructions will get you a new Django project up and running on your local machine for development purposes. See [deployment](#deployment) on how to deploy for a production system.
 
@@ -139,8 +135,6 @@ Modify the **myproject/.env** file with your configuration options.
 
 ## Usage
 
-___
-
 After install there will be a set of resources available to use in your projects or easily replaced. A basic layout with index, home, login and register pages. Some basic CSS styles for a clean looking layout, forms and messages.
 
 **URL Routes**:
@@ -185,20 +179,14 @@ In your projects, you'll most likely have your own index, home and/or dashboard 
 
 ## Deployment
 
-___
-
 TODO: deployment steps for running your Django project with Apache and mod_wsgi.
 
 ## Contributing
-
-___
 
 All contributions are welcome!  
 Fork it, create feature branch, commit and push, create pull request.
 
 ## License
-
-___
 
 [0BSD](LICENSE.txt)
 
@@ -206,8 +194,6 @@ ___
 > purpose with or without fee is hereby granted.
 
 ## Acknowledgments
-
-___
 
 * [Custom user model for new projects](https://docs.djangoproject.com/en/4.1/topics/auth/customizing/#using-a-custom-user-model-when-starting-a-project)
 * [Implement a custom user model](https://learndjango.com/tutorials/django-custom-user-model)
