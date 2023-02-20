@@ -52,12 +52,12 @@ if [ ! -d "$PROJECT_PATH" ]; then
 fi
 
 # Install and set up project
-echo "*** Set up project..."
+printf "*** Set up project...\n"
 cd "$PROJECT_PATH"
 cp "${SCRIPT_PATH}/requirements.txt" "$PROJECT_PATH"
 cp "${SCRIPT_PATH}/.gitignore" "$PROJECT_PATH"
 
-echo "*** Create Python virtual environment.\n"
+printf "*** Create Python virtual environment.\n\n"
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -U pip
@@ -65,11 +65,11 @@ pip3 install -r requirements.txt
 deactivate
 source venv/bin/activate
 
-echo "\n*** Create Django project ($PROJECT_NAME)."
+printf "\n*** Create Django project ($PROJECT_NAME).\n"
 django-admin startproject "$PROJECT_NAME"
 deactivate
 
-echo "*** Copy project files."
+printf "*** Copy project files.\n"
 cd "$PROJECT_NAME"
 cp -R "${SCRIPT_PATH}/account/user" .
 cp -R "${SCRIPT_PATH}/account/templates" .
@@ -78,22 +78,11 @@ cp -R "${SCRIPT_PATH}/account/account/.env.dist" "${PROJECT_NAME}/"
 cp -R "${SCRIPT_PATH}/account/account/.env.dist" "${PROJECT_NAME}/.env"
 cp -R "${SCRIPT_PATH}/account/account/urls.py" "${PROJECT_NAME}/"
 cp -R "${SCRIPT_PATH}/account/account/settings.py" "${PROJECT_NAME}/"
-sed -i '' "s|'account.urls'|'${PROJECT_NAME}.urls'|" "${PROJECT_NAME}/settings.py"
-sed -i '' "s|'account.wsgi.application'|'${PROJECT_NAME}.wsgi.application'|" "${PROJECT_NAME}/settings.py"
+sed -i.bak "s|'account.urls'|'${PROJECT_NAME}.urls'|" "${PROJECT_NAME}/settings.py"
+sed -i.bak "s|'account.wsgi.application'|'${PROJECT_NAME}.wsgi.application'|" "${PROJECT_NAME}/settings.py"
+rm "${PROJECT_NAME}/settings.py.bak"
 
-printf "Would you like to create a self-signed SSL cert? (yes/no) [default no] "
-read MAKE_CERT
-case "$MAKE_CERT" in
-  y|Y|yes)
-    openssl genrsa -out local.key 2048
-    openssl req -new -key local.key -out local.csr
-    openssl x509 -req -days 3650 -in local.csr -signkey local.key -out local.crt
-    ;;
-  *)
-    ;;
-esac
-
-echo "*** Project set up complete.\n"
+printf "*** Project set up complete.\n\n"
 printf "*** Post set up tasks:\n"
 printf "  Create database. If not using MySQL, install any necessary python packages\n"
 printf "    and update the DATABASES option in the settings.py file.\n"
@@ -101,8 +90,5 @@ printf "  Modify the ${PROJECT_NAME}/.env file with your configuration options.\
 printf "  Run the following commands within the project directory:\n"
 printf "    (venv) $ python manage.py makemigrations\n"
 printf "    (venv) $ python manage.py migrate\n"
-printf "    If created a self-signed cert:\n"
-printf "    (venv) $ python manage.py runserver_plus --cert-file local.crt --key-file local.key\n"
-printf "    To auto create a cert:\n"
 printf "    (venv) $ python manage.py runserver_plus --cert-file cert.crt\n"
 printf "\n\n"
