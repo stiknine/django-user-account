@@ -33,6 +33,11 @@ class AccountModelTest(TestCase):
         """Test user account __str__ method."""
         self.assertEqual(str(self.user_account), self.username)
 
+    def test_email_unique(self):
+        """Test email is a unique field."""
+        email_unique = self.user_account._meta.get_field('email').unique
+        self.assertIs(email_unique, True)
+
 
 class AccountViewTest(TestCase):
     username = ''
@@ -80,12 +85,13 @@ class AccountViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'registration/login.html')
 
-    def test_login(self):
-        """Test user login."""
+    def test_login_and_home(self):
+        """Test user login and home."""
         login = self.client.login(username=self.username, password=self.password)
-        response = self.client.get(reverse('user:index'), follow=True)
+        response = self.client.get(reverse('user:home'), follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, f'Hello {self.username}!')
+        self.assertContains(response, f'Welcome home, <strong>{self.username}</strong>!')
+        self.assertTemplateUsed(response, 'home.html')
 
     def test_account_register(self):
         """Test user account registration."""
@@ -96,16 +102,19 @@ class AccountViewTest(TestCase):
                                           'password2': self.password})
         self.assertEqual(response.status_code, 301)
 
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('user:home'), follow=True)
+        self.assertRedirects(response, '/login/?next=/home/', status_code=301)
+
 
 class AccountFormTest(TestCase):
-    def test_register_form_passwords_dont_match(self):
-        """Test register form passwords don't match."""
-        self.username = 'test' + random.choice(string.digits)
-        self.password = secrets.token_urlsafe(8)
-        email = f'{self.username}@test.com'
-        form = AccountCreateForm(data={'username': self.username,
-                                       'email': email,
-                                       'password1': self.password,
-                                       'password2': 'x'})
+    def test_register_form_username_help_text(self):
+        """Test username help text."""
+        form = AccountCreateForm()
+        self.assertEqual(form.fields['username'].help_text, '4 to 150 characters. Letters, numbers and @ . + - _ only.')
+
+    def test_register_form_username_min_length(self):
+        """Test username minimum length validation."""
+        form = AccountCreateForm(data={'username': 'abc', 'email': '', 'password1': '', 'password2': ''})
         self.assertFalse(form.is_valid())
-        self.assertIn("The two password fields didn’t match.", form.errors['password2'])
+        self.assertIn("Enter a valid username, must be a minimum of 4 characters.", form.errors['username'])
