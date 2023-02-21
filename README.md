@@ -229,8 +229,9 @@ $ sudo chmod 770 /var/www/my_project
 Copy over your application files, using whatever method available to you.
 
 ```
-$ cp /path/to/application/* /var/www/my_project/
+$ cp /path/to/my_project/* /var/www/my_project/
 $ cd /var/www/my_project
+$ sudo chown -R www-data:www-data myproject
 $ python3 -m venv venv
 $ source venv/bin/activate
 (venv) $ pip3 install -U pip
@@ -240,7 +241,7 @@ $ source venv/bin/activate
 
 Modify the **myproject/.env** file with your configuration options.
 
-**NOTE**: debug must to disabled, allow hosts needs to include your fully qualified domain name "FQDN", a secret key needs to be generated, static root needs to be set.
+**NOTE**: debug must be disabled, allow hosts needs to include your fully qualified domain name "FQDN", a secret key needs to be generated, static root needs to be set.
 
 Run to generate a secret key.
 
