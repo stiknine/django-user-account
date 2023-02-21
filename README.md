@@ -2,14 +2,14 @@
 
 A Django project which implements a custom user model, environment variable configuration (.env), django and auth logging, and a basic project layout.
 
-This allows you to get a Django project up and running quickly, with some recommended features and best practices already configured and ready to use. The custom user model adds a couple of features to be base auth system, makes email a unique field and a minimum length validator for the username.
+This allows you to get a Django project up and running quickly, with some recommended features and best practices already configured and ready to use. The custom user model adds a couple of features to the base auth system: makes email a unique field and a minimum length validator for the username.
 
 By default, MySQL is the pre-configured database engine. If your project uses a different database, such as PostgreSQL, you'll need to install any necessary Python packages and update the database settings prior to running the database migrate commands.  
 
 ## Features
 
 * Custom User Model
-  * Recommended when starting a new project with authentication
+  * Recommended when starting a new project using authentication
 * django-environ
   * Settings are pre-configured to use the provided .env file
 * django-extensions
@@ -52,7 +52,7 @@ $ git clone https://github.com/stiknine/django-user-account.git .
 Run the setup script, passing in your Django project name and path to your project directory.
 
 ```
-$ sh setup.sh -n myproject -p /path/to/my_project
+$ source setup.sh -n myproject -p /path/to/my_project
 ```
 
 ### Manual Installation
@@ -73,9 +73,9 @@ $ cd /path/to/my_project
 $ cp /path/to/django_user_account/requirements.txt .
 $ python3 -m venv venv
 $ source venv/bin/activate
-$ pip3 install -U pip
-$ pip3 install -r requirements.txt
-$ deactivate
+(venv) $ pip3 install -U pip
+(venv) $ pip3 install -r requirements.txt
+(venv) $ deactivate
 ```
 
 **Create a new Django project**
@@ -83,8 +83,8 @@ $ deactivate
 ```
 $ cd /path/to/my_project
 $ source venv/bin/activate
-$ django-admin startproject myproject
-$ deactivate
+(venv) $ django-admin startproject myproject
+(venv) $ deactivate
 ```
 
 **Copy over the project files from the repo**
@@ -126,11 +126,7 @@ Modify the **myproject/.env** file with your configuration options.
 **Run development server**
 
 ```
-# will auto create a cert file
 (venv) $ python manage.py runserver_plus --cert-file cert.crt
-
-# if created cert file with the setup script
-(venv) $ python manage.py runserver_plus --cert-file local.crt --key-file local.key
 ```
 
 ## Usage
@@ -175,11 +171,148 @@ After install there will be a set of resources available to use in your projects
 └── .gitignore
 ```
 
-In your projects, you'll most likely have your own index, home and/or dashboard routes. Modify **user/views.py** and delete or move the **user/views.IndexView** and **user/views.HomeView** views. Modify the **user/urls.py** and delete the index and home URLs. Modify the **myproject/settings.py** and update the **LOGIN_REDIRECT_URL** and **LOGOUT_REDIRECT_URL** options.
+In your projects, you'll most likely have your own index, home and/or dashboard routes.
+
+* Modify **user/views.py** and delete or move the **user/views.IndexView** and **user/views.HomeView** views.
+* Modify the **user/urls.py** and delete the index and home URLs.
+* Modify the **myproject/settings.py** and update the **LOGIN_REDIRECT_URL** and **LOGOUT_REDIRECT_URL** options.
+
+## Tests
+
+The project includes a few basic tests. To run them, first create a test database and modify the **.env** file to update the **DATABASE_TEST** option with your test database name.
+
+**Run tests**
+
+```
+(venv) $ python manage.py test --keepdb
+```
 
 ## Deployment
 
-TODO: deployment steps for running your Django project with Apache and mod_wsgi.
+The following instructions will help you deploy your Python web application in a production environment.
+
+### Apache and mod_wsgi
+
+There is an example [Apache conf](server/apache/user-account-ssl.conf) provided in the repo. Skip any steps if you already have the packages installed and configured.
+
+**Install Apache, mod_wsgi and Python packages**  
+
+```
+$ sudo apt install openssl
+$ sudo apt install mysql-client
+$ sudo apt install python3-dev python3-venv python3-distutils python3-pip net-tools
+$ sudo apt install apache2 apache2-utils libapache2-mod-wsgi-py3 ssl-cert
+```
+
+**Allow Apache through the firewall**
+
+```
+$ sudo ufw app list
+$ sudo ufw allow 'Apache Full'
+```
+
+**Enable Apache ssl and wsgi mods**
+
+```
+$ sudo a2enmod ssl
+$ sudo a2enmod wsgi
+```
+
+**Set up and configure application**
+
+```
+$ sudo mkdir /var/www/my_project
+$ sudo chown www-data:www-data /var/www/my_project
+$ sudo chmod 770 /var/www/my_project
+```
+
+Copy over your application files, using whatever method available to you.
+
+```
+$ cp /path/to/application/* /var/www/my_project/
+$ cd /var/www/my_project
+$ python3 -m venv venv
+$ source venv/bin/activate
+(venv) $ pip3 install -U pip
+(venv) $ pip3 install -r requirements.txt
+(venv) $ cd myproject/
+```
+
+Modify the **myproject/.env** file with your configuration options.
+
+**NOTE**: debug must to disabled, allow hosts needs to include your fully qualified domain name "FQDN", a secret key needs to be generated, static root needs to be set.
+
+Run to generate a secret key.
+
+```
+(venv) $ python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
+
+.env file.
+
+```
+DEBUG=False
+ALLOWED_HOSTS='127.0.0.1,localhost,<FQDN>'
+SECRET_KEY='<generated secret key>'
+STATIC_ROOT='/var/www/my_project/static/'
+```
+
+Collect static files.
+
+```
+(venv) $ python manage.py collectstatic
+(venv) $ deactivate
+```
+
+Configure Apache. Get a copy of the example [Apache conf](server/apache/user-account-ssl.conf) and modify it for your application.
+
+```
+ErrorLog ${APACHE_LOG_DIR}/myproject-error.log
+CustomLog ${APACHE_LOG_DIR}/myproject-access.log combined
+
+WSGIDaemonProcess myproject python-home=/var/www/my_project/venv python-path=/var/www/my_project/myproject processes=2 threads=5
+WSGIScriptAlias / /var/www/my_project/myproject/myproject/wsgi.py
+WSGIProcessGroup myproject
+
+<Directory "/var/www/my_project/myproject/myproject">
+    <Files wsgi.py>
+        Require all granted
+    </Files>
+</Directory>
+
+Alias "/static/" "/var/www/my_project/static/"
+<Directory "/var/www/my_project/static">
+    Options -Indexes +FollowSymLinks +MultiViews
+    Require all granted
+</Directory>
+```
+
+Enable your application.
+
+```
+$ sudo cp /path/to/myproject-ssl.conf /etc/apache2/sites-available/
+$ sudo a2ensite myproject-ssl.conf
+$ sudo systemctl restart apache2
+```
+
+If everything worked as expected, your site should be running and available.
+
+Log files located at:
+
+* /var/log/apache2/
+  * myproject-access.log
+  * myproject-error.log
+* /var/www/my_project/log/
+  * auth.log
+  * django.log
+
+### Nginx and uWSGI
+
+Instructions to come...
+
+### Log Rotation
+
+Instructions to come...
 
 ## Contributing
 
