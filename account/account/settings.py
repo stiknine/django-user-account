@@ -5,7 +5,9 @@ import pymysql
 from pathlib import Path
 
 # Read environment (.env) file
-env = environ.Env()
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 environ.Env.read_env()
 
 # Set pymysql to act as mysqlclient
